@@ -139,7 +139,7 @@ class AddressBook(UserDict):
 if __name__ == "__main__":
     ab = AddressBook()
     name1 = Name("Bill")
-    phone1 = Phone("+380996787878")
+    phone1 = Phone("+380996787877")
     rec1 = Record(name1, phone1)
 
     rec2 = Record(Name("Jill"), Phone("+389671234545"), Birthday("12.03.1995"))
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     ab.add_record(rec1)
     ab.add_record(rec2)
 
-    phone3 = Phone("045342343422")  # This line must rise exceptions!
+    phone3 = Phone("045342343422")
 
     rec1.add(phone3)
 
@@ -159,6 +159,9 @@ if __name__ == "__main__":
     print(ab["Jill"].days_to_birthday())
 
     print(ab)
+
+    ab["Bill"].remove(phone3)
+
     for k in ab:
         print(k)
 
