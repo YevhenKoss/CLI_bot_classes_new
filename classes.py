@@ -1,5 +1,7 @@
 from collections import UserDict
 from validation import *
+import re
+import pickle
 
 
 class Field:
@@ -60,7 +62,7 @@ class Record:
         self.birthday = birthday
 
     def __repr__(self):
-        return f"{self.name.value} {','.join([p.value for p in self.phones]) if self.phones else ''}" \
+        return f"{self.name.value}: {', '.join([p.value for p in self.phones]) if self.phones else ''}" \
                f" {self.birthday if self.birthday else ''}"
 
     def add(self, phone: Phone):
@@ -135,6 +137,21 @@ class AddressBook(UserDict):
         return f"{record.name}: {', '.join([p.value for p in record.phones]) if record.phones else ''} " \
                f"{record.birthday if record.birthday else ''}"
 
+    def search(self, find_data):
+        result = []
+        for record in self.data.values():
+            if re.findall(find_data, record.name.value, re.IGNORECASE):
+                result.append(self.data[record.name.value])
+            for p in record.phones:
+                if re.findall(find_data, p.value, re.IGNORECASE):
+                    result.append(self.data[record.name.value])
+        if result:
+            for i in result:
+                print(i)
+        else:
+            print("Request was not found. Try specifying other search criteria.")
+
+
 
 if __name__ == "__main__":
     ab = AddressBook()
@@ -156,15 +173,17 @@ if __name__ == "__main__":
 
     rec1.edit(phone1, phone5)
 
-    print(ab["Jill"].days_to_birthday())
-
-    print(ab)
-
-    ab["Bill"].remove(phone3)
-
+    # print(ab["Jill"].days_to_birthday())
+    #
+    # print(ab)
+    #
+    # ab["Bill"].remove(phone3)
+    #
     for k in ab:
         print(k)
+    #
+    # show = ab.show(0, 0)
+    # for i in show:
+    #     print(i)
 
-    show = ab.show(0, 0)
-    for i in show:
-        print(i)
+    ab.search("066")
