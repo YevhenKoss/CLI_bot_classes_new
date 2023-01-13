@@ -2,6 +2,7 @@ from collections import UserDict
 from validation import *
 import re
 import pickle
+import pathlib
 
 
 class Field:
@@ -120,6 +121,13 @@ class AddressBook(UserDict):
         else:
             print(f"Value 'end' {end} is more than numbers of Address Book")
 
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, attributes):
+        self.__dict__.update(attributes)
+
     def __repr__(self):
         return f"{self.data}"
 
@@ -152,7 +160,6 @@ class AddressBook(UserDict):
             print("Request was not found. Try specifying other search criteria.")
 
 
-
 if __name__ == "__main__":
     ab = AddressBook()
     name1 = Name("Bill")
@@ -179,11 +186,33 @@ if __name__ == "__main__":
     #
     # ab["Bill"].remove(phone3)
     #
-    for k in ab:
-        print(k)
+    # for k in ab:
+    #     print(k)
     #
     # show = ab.show(0, 0)
     # for i in show:
     #     print(i)
 
+
+# HOME WORK 12
     ab.search("066")
+
+    with open("save.bin", "wb") as file:
+        pickle.dump(ab, file)
+        print("Data saved")
+
+    # Loading an address book from a file 'save.bin'.
+    path = pathlib.Path("save.bin")
+    if path.exists():
+        with open("save.bin", "rb") as file:
+            ab1 = pickle.load(file)
+    else:
+        print("Save data is missing!")
+
+    # print(ab)
+    #
+    # print(ab1)
+
+    # ab1.search("j")
+    for k in ab1:
+        print(k)
